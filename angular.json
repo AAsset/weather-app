@@ -25,7 +25,7 @@
             ],
             "styles": [
               "src/assets/fonts/weather-icons/sass/weather-icons.scss",
-              "src/styles.scss"
+              "src/styles/main.scss"
             ],
             "scripts": []
           },
@@ -89,7 +89,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/main.scss"
             ],
             "scripts": []
           }
