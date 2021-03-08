@@ -1,0 +1,55 @@
+<div class="weather__forecast">
+  <div class="weather__header">
+    <div class="weather__header-left">
+      <span class="weather__header-back material-icons" (click)="onNavigateBack()">keyboard_backspace</span>
+      <span class="weather__title">{{cityName | titlecase}}</span>
+    </div>
+    <div class="weather__header-right">
+      <app-slide-toggle [size]="'small'"
+                        [labelOn]="'°C'"
+                        [labelOff]="'°F'"
+                        [checked]="true"
+                        (change)="onToggle($event)"
+      ></app-slide-toggle>
+    </div>
+  </div>
+
+  <ng-container *ngIf="weather$ | async as weather; else errorMessage">
+    <div class="weather__current">
+      <h3 class="weather__current-date">{{currentDate | date: 'EEEE, MMMM d, y'}}</h3>
+      <h4 class="weather__current-desc">{{weather?.main}}</h4>
+      <div class="weather__info">
+        <div class="weather__info-left">
+          <div>{{weather?.temp | temperatureConverter: tempConverter}} <i class="wi wi-owm-{{weather?.iconId}}"></i></div>
+        </div>
+        <div class="weather__info-right">
+          <ul class="weather__info-list">
+            <li>
+              <span>Morning</span> {{weather?.morning | temperatureConverter: tempConverter}}
+            </li>
+            <li>
+              <span>Day</span> {{weather?.day | temperatureConverter: tempConverter}}
+            </li>
+            <li>
+              <span>Evening</span> {{weather?.evening | temperatureConverter: tempConverter}}
+            </li>
+            <li>
+              <span>Night</span> {{weather?.night | temperatureConverter: tempConverter}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="weather__week">
+      <div class="weather__week-item" *ngFor="let day of weather?.daily; trackBy: trackByFn;">
+        <h4>{{day?.date | date: 'EEEE'}}</h4>
+        <i class="weather__week-icon wi wi-owm-{{day?.iconId}}"></i>
+        <p>{{day?.temp | temperatureConverter: tempConverter}}</p>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #errorMessage>
+    <ng-container *ngIf="errorObject$ | async as errorObject">{{errorObject?.message}}</ng-container>
+  </ng-template>
+</div>

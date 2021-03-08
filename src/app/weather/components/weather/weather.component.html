@@ -1,0 +1,11 @@
+<div class="weather__container">
+  <app-search
+    class="weather__search"
+    [placeholder]="'City'"
+    (searchCriteria)="onSearch($event)"
+  ></app-search>
+  <div class="weather__position">
+    <p>or</p>
+    <p>use my <span class="weather__position-current">current position</span></p>
+  </div>
+</div>
