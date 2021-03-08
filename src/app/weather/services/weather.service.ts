@@ -53,21 +53,31 @@ export class WeatherService {
   private mapToForecast(data: any): IWeatherForecast {
     const forecast: IWeatherForecast = {
       temp: data.current ? data.current.temp : data.temp.day || '',
-      date: data.daily ? data.daily[0].dt * 1000 : data.dt * 1000,
-      main: data.daily ? data.daily[0].weather[0].main : data.weather[0].main,
-      description: data.daily ? data.daily[0].weather[0].description : data.weather[0].description,
-      icon: data.daily ? data.daily[0].weather[0].icon : data.weather[0].icon,
-      iconId: data.daily ? data.daily[0].weather[0].id : data.weather[0].id,
+      date: data.current ? this.parseDateByTimezone(data.current.dt * 1000, data.timezone_offset) : data.dt * 1000,
+      main: data.current ? data.current.weather[0].main : data.weather[0].main,
+      description: data.current ? data.current.weather[0].description : data.weather[0].description,
+      icon: data.current ? data.current.weather[0].icon : data.weather[0].icon,
+      iconId: data.current ? data.current.weather[0].id : data.weather[0].id,
       morning: data.daily ? data.daily[0].temp.morn : data.temp.morn,
       day: data.daily ? data.daily[0].temp.day : data.temp.day,
       evening: data.daily ? data.daily[0].temp.eve : data.temp.eve,
       night: data.daily ? data.daily[0].temp.night : data.temp.night,
       daily: data.daily ? data.daily.slice(0, 7).map(d => this.mapToForecast(d)) : [],
-      lat: data.lat,
-      lon: data.lon,
-      timezone: data.timezone
+      lat: data.lat || '',
+      lon: data.lon || '',
+      timezone: data.timezone || '',
+      timezoneOffset: data.timezone_offset || 0,
     };
 
     return forecast;
+  }
+
+  private parseDateByTimezone(date, timezoneOffset: number) {
+    const d = new Date(date);
+    const localTime = d.getTime();
+    const localOffset = d.getTimezoneOffset() * 60000;
+    const utc = localTime + localOffset;
+    const pDate = utc + (1000 * timezoneOffset);
+    return new Date(pDate);
   }
 }

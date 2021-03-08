@@ -16,7 +16,7 @@
 
   <ng-container *ngIf="weather$ | async as weather; else errorMessage">
     <div class="weather__current">
-      <h3 class="weather__current-date">{{currentDate | date: 'EEEE, MMMM d, y'}}</h3>
+      <h3 class="weather__current-date">{{weather?.date | date: 'fullDate'}}</h3>
       <h4 class="weather__current-desc">{{weather?.main}}</h4>
       <div class="weather__info">
         <div class="weather__info-left">

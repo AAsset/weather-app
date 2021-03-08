@@ -1,6 +1,6 @@
 export interface IWeatherForecast {
   temp: number;
-  date: number;
+  date: Date | number;
   main: string;
   description: string;
   icon: string;
@@ -13,4 +13,5 @@ export interface IWeatherForecast {
   lat: number;
   lon: number;
   timezone: string;
+  timezoneOffset: number;
 }

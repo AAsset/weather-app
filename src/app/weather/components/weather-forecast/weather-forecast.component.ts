@@ -13,7 +13,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class WeatherForecastComponent implements OnInit, OnDestroy {
   cityName: string;
-  currentDate: Date = new Date();
   tempConverter: 'C' | 'F' = 'C';
   weather$: Observable<IWeatherForecast>;
   errorObject$: Observable<Error | HttpErrorResponse>;
@@ -58,7 +57,7 @@ export class WeatherForecastComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.destroyed$.next(null);
+    this.destroyed$.next();
     this.destroyed$.complete();
   }
 }
