@@ -87,13 +87,14 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
     color: $bombay;
 
     &-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      flex: 1;
       margin-top: 10px;
       margin-right: 10px;
 
@@ -104,6 +105,10 @@
 
     &-icon {
       color: $nevada;
+    }
+
+    @media(max-width: 576px) {
+      justify-content: flex-start;
     }
   }
 }

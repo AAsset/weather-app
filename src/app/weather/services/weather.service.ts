@@ -1,40 +1,67 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of, forkJoin } from 'rxjs';
 import { IWeatherForecast } from '../interfaces/weather-forecast.interface';
 import { environment } from 'environments/environment';
-import { map, mergeMap, catchError } from 'rxjs/operators';
-import { IForecast } from '../interfaces/forecast.interface';
+import { map, catchError, flatMap, tap } from 'rxjs/operators';
+import { IForecast, IForecastCity } from '../interfaces/forecast.interface';
+import { IWeatherParams } from '../interfaces/weather-params.interface';
 
 @Injectable()
 export class WeatherService {
 
   constructor(private http: HttpClient) { }
 
-  public fetchWeatherForecast(cityName: string): Observable<IWeatherForecast> {
-    return this.fetchForecastByCityName(cityName).pipe(
-      map(f => f.city.coord),
-      mergeMap(coord => this.fetchForecastByCoords(coord.lat, coord.lon)),
-      map(w => this.mapToForecast(w)),
+  public fetchWeatherForecast(params: IWeatherParams): Observable<IWeatherForecast | any> {
+    return this.fetchForecastByCity(params).pipe(
+      map(f => ({ city: f.city })),
+      flatMap(data => forkJoin([
+        this.fetchForecastByCoords(data.city.coord.lat, data.city.coord.lon),
+        of(data.city),
+      ])),
+      tap(
+        ([weather, city]: [IWeatherForecast, IForecastCity]) => ((weather.city = city))
+      ),
+      map(([weather]) => weather),
       catchError(this.handleError)
     );
   }
 
   public fetchForecastByCoords(lat: number, lon: number): Observable<IWeatherForecast> {
-    const params = new HttpParams()
-      .set('lat', `${lat}`)
-      .set('lon', `${lon}`)
-      .set('units', 'metric')
-      .set('appid', environment.openweather_api_key);
-    return this.http.get<IWeatherForecast>(environment.openweather_url + 'onecall', { params: params });
+    const queryParams = new HttpParams({
+      fromObject: {
+        lat: `${lat}`,
+        lon: `${lon}`,
+        units: 'metric',
+        appid: environment.openweather_api_key
+      }
+    });
+    return this.http.get<IWeatherForecast>(
+      `${environment.openweather_url}onecall?${queryParams}`
+    ).pipe(
+      map(w => this.mapToForecast(w)),
+      catchError(this.handleError),
+    );
   }
 
-  private fetchForecastByCityName(cityName: string): Observable<IForecast> {
-    const params = new HttpParams()
-      .set('q', cityName)
-      .set('cnt', '7')
-      .set('appid', environment.openweather_api_key);
-    return this.http.get<IForecast>(environment.openweather_url + 'forecast', { params: params });
+  public fetchForecastByCity(params: IWeatherParams): Observable<IForecast> {
+    const obj: any = {
+      cnt: 7,
+      appid: environment.openweather_api_key
+    };
+    if (params.city) {
+      obj.q = params.city;
+    }
+    if (params.lat) {
+      obj.lat = params.lat;
+    }
+    if (params.lon) {
+      obj.lon = params.lon;
+    }
+    const queryParams = new HttpParams({
+      fromObject: obj
+    });
+    return this.http.get<IForecast>(`${environment.openweather_url}forecast?${queryParams}`);
   }
 
   private handleError(error: Error | HttpErrorResponse): Observable<never> {
@@ -63,10 +90,6 @@ export class WeatherService {
       evening: data.daily ? data.daily[0].temp.eve : data.temp.eve,
       night: data.daily ? data.daily[0].temp.night : data.temp.night,
       daily: data.daily ? data.daily.slice(0, 7).map(d => this.mapToForecast(d)) : [],
-      lat: data.lat || '',
-      lon: data.lon || '',
-      timezone: data.timezone || '',
-      timezoneOffset: data.timezone_offset || 0,
     };
 
     return forecast;

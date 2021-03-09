@@ -2,7 +2,9 @@
   <div class="weather__header">
     <div class="weather__header-left">
       <span class="weather__header-back material-icons" (click)="onNavigateBack()">keyboard_backspace</span>
-      <span class="weather__title">{{cityName | titlecase}}</span>
+      <ng-container *ngIf="cityName$ | async as cityName">
+        <span class="weather__title">{{cityName | titlecase}}</span>
+      </ng-container>
     </div>
     <div class="weather__header-right">
       <app-slide-toggle [size]="'small'"

@@ -1,3 +1,5 @@
+import { IForecastCity } from './forecast.interface';
+
 export interface IWeatherForecast {
   temp: number;
   date: Date | number;
@@ -10,8 +12,5 @@ export interface IWeatherForecast {
   evening: number;
   night: number;
   daily?: IWeatherForecast[];
-  lat: number;
-  lon: number;
-  timezone: string;
-  timezoneOffset: number;
+  city?: IForecastCity;
 }
