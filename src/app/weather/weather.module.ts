@@ -9,6 +9,7 @@ import { TemperatureConverterPipe } from './pipes/temperature-converter.pipe';
 import { SearchModule } from 'app/ui/search/search.module';
 import { SlideToggleModule } from 'app/ui/slide-toggle/slide-toggle.module';
 import { WeatherService } from './services/weather.service';
+import { GeoLocationService } from './services/geo-location.service';
 
 
 @NgModule({
@@ -24,6 +25,9 @@ import { WeatherService } from './services/weather.service';
     SearchModule,
     SlideToggleModule,
   ],
-  providers: [WeatherService]
+  providers: [
+    WeatherService,
+    GeoLocationService,
+  ]
 })
 export class WeatherModule { }

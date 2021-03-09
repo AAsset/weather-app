@@ -1,6 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { WeatherService } from 'app/weather/services/weather.service';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { GeoLocationService } from 'app/weather/services/geo-location.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-weather',
@@ -8,16 +10,39 @@ import { Router } from '@angular/router';
   styleUrls: ['./weather.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WeatherComponent implements OnInit {
+export class WeatherComponent implements OnInit, OnDestroy {
 
-  constructor(private weatherService: WeatherService,
+  destroyed$ = new Subject();
+
+  constructor(private geoLocationService: GeoLocationService,
               private router: Router) { }
 
   ngOnInit(): void {
   }
 
-
   onSearch(value) {
-    this.router.navigate(['/forecast'], { queryParams: { city: value }});
+    this.onForecastNavigate({
+      city: value
+    });
+  }
+
+  onCurrentPosition() {
+    this.geoLocationService.getPosition()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(position => {
+        this.onForecastNavigate({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        });
+      });
+  }
+
+  onForecastNavigate(queryParams) {
+    this.router.navigate(['/forecast'], { queryParams });
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
