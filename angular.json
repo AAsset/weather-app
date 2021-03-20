@@ -126,7 +126,8 @@
   "defaultProject": "weather-app",
   "schematics": {
     "@schematics/angular:component": {
-      "style": "scss"
+      "style": "scss",
+      "changeDetection": "OnPush"
     }
   }
 }
