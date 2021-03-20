@@ -10,6 +10,7 @@ import { SearchModule } from 'app/ui/search/search.module';
 import { SlideToggleModule } from 'app/ui/slide-toggle/slide-toggle.module';
 import { WeatherService } from './services/weather.service';
 import { GeoLocationService } from './services/geo-location.service';
+import { WeatherWeekDayComponent } from './components/weather-week-day/weather-week-day.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { GeoLocationService } from './services/geo-location.service';
     WeatherComponent,
     WeatherForecastComponent,
     TemperatureConverterPipe,
+    WeatherWeekDayComponent,
   ],
   imports: [
     CommonModule,

@@ -43,11 +43,11 @@
       </div>
     </div>
     <div class="weather__week">
-      <div class="weather__week-item" *ngFor="let day of weather?.daily; trackBy: trackByFn;">
-        <h4>{{day?.date | date: 'EEEE'}}</h4>
-        <i class="weather__week-icon wi wi-owm-{{day?.iconId}}"></i>
-        <p>{{day?.temp | temperatureConverter: tempConverter}}</p>
-      </div>
+      <app-weather-week-day *ngFor="let day of weather?.daily; trackBy: trackByFn;"
+                            class="weather__week-item"
+                            [day]="day"
+                            [tempConverter]="tempConverter"
+      ></app-weather-week-day>
     </div>
   </ng-container>
 

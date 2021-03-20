@@ -1,0 +1,5 @@
+<div class="weather__day">
+  <h4>{{day?.date | date: 'EEEE'}}</h4>
+  <i class="weather__day-icon wi wi-owm-{{day?.iconId}}"></i>
+  <p>{{day?.temp | temperatureConverter: tempConverter}}</p>
+</div>
