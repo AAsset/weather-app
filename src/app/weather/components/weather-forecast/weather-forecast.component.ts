@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntil, catchError } from 'rxjs/operators';
-import { Subject, Observable, of, throwError } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Subject, Observable, of } from 'rxjs';
 import { IWeatherForecast } from 'app/weather/interfaces/weather-forecast.interface';
-import { HttpErrorResponse } from '@angular/common/http';
+import { IWeatherForecastResolved } from 'app/weather/interfaces/weather-forecast-resolved.interface';
 
 @Component({
   selector: 'app-weather-forecast',
@@ -13,8 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class WeatherForecastComponent implements OnInit, OnDestroy {
   tempConverter: 'C' | 'F' = 'C';
-  weather$: Observable<IWeatherForecast>;
-  errorObject$: Observable<Error | HttpErrorResponse>;
+  weatherForecast$: Observable<IWeatherForecastResolved>;
 
   destroyed$ = new Subject();
 
@@ -22,17 +21,12 @@ export class WeatherForecastComponent implements OnInit, OnDestroy {
               private router: Router) { }
 
   ngOnInit(): void {
-    this.weather$ = of(this.route.snapshot.data.weather).pipe(
-      catchError(err => {
-        this.errorObject$ = of(err.error);
-        throwError(err);
-        return of(null);
-      }),
+    this.weatherForecast$ = of(this.route.snapshot.data.weather).pipe(
       takeUntil(this.destroyed$)
     );
   }
 
-  onToggle(value) {
+  onToggle(value: string) {
     this.tempConverter = value ? 'C' : 'F';
   }
 
@@ -40,7 +34,7 @@ export class WeatherForecastComponent implements OnInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
-  trackByFn(index, item) {
+  trackByFn(index: number, item: IWeatherForecast) {
     return item.date;
   }
 
