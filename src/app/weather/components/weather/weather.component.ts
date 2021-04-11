@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { GeoLocationService } from 'app/weather/services/geo-location.service';
+import { GeoLocationService } from 'app/weather/services/geo-location/geo-location.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

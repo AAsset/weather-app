@@ -6,7 +6,7 @@ export class GeoLocationService {
 
   constructor() { }
 
-  getPosition(): Observable<Position> {
+  getPosition(): Observable<GeolocationPosition> {
     return new Observable(obs => {
       if(window.navigator && window.navigator.geolocation) {
         window.navigator.geolocation.getCurrentPosition(

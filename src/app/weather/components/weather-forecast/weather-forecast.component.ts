@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WeatherService } from 'app/weather/services/weather.service';
+import { WeatherService } from 'app/weather/services/weather/weather.service';
 import { takeUntil, catchError, tap } from 'rxjs/operators';
 import { Subject, Observable, of, throwError } from 'rxjs';
 import { IWeatherForecast } from 'app/weather/interfaces/weather-forecast.interface';
