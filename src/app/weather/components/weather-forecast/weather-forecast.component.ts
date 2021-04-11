@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WeatherService } from 'app/weather/services/weather/weather.service';
-import { takeUntil, catchError, tap } from 'rxjs/operators';
+import { takeUntil, catchError } from 'rxjs/operators';
 import { Subject, Observable, of, throwError } from 'rxjs';
 import { IWeatherForecast } from 'app/weather/interfaces/weather-forecast.interface';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -14,35 +13,23 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class WeatherForecastComponent implements OnInit, OnDestroy {
   tempConverter: 'C' | 'F' = 'C';
-  cityName$: Observable<string>;
   weather$: Observable<IWeatherForecast>;
   errorObject$: Observable<Error | HttpErrorResponse>;
 
   destroyed$ = new Subject();
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private weatherService: WeatherService) { }
+              private router: Router) { }
 
   ngOnInit(): void {
-    this.route.queryParams
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(params => {
-        this.fetchWeatherForecast(params);
-      });
-  }
-
-  fetchWeatherForecast(params) {
-    this.weather$ = this.weatherService.fetchWeatherForecast(params)
-      .pipe(
-        catchError(err => {
-          this.errorObject$ = of(err.error);
-          throwError(err);
-          return of(null);
-        }),
-        tap(w => this.cityName$ = of(w.city.name)),
-        takeUntil(this.destroyed$)
-      );
+    this.weather$ = of(this.route.snapshot.data.weather).pipe(
+      catchError(err => {
+        this.errorObject$ = of(err.error);
+        throwError(err);
+        return of(null);
+      }),
+      takeUntil(this.destroyed$)
+    );
   }
 
   onToggle(value) {

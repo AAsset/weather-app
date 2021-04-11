@@ -2,8 +2,8 @@
   <div class="weather__header">
     <div class="weather__header-left">
       <span class="weather__header-back material-icons" (click)="onNavigateBack()">keyboard_backspace</span>
-      <ng-container *ngIf="cityName$ | async as cityName">
-        <span class="weather__title">{{cityName | titlecase}}</span>
+      <ng-container *ngIf="weather$ | async as weather">
+        <span class="weather__title">{{weather?.city?.name | titlecase}}</span>
       </ng-container>
     </div>
     <div class="weather__header-right">

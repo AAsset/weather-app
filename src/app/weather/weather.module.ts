@@ -10,6 +10,7 @@ import { SlideToggleModule } from 'app/ui/slide-toggle/slide-toggle.module';
 import { WeatherService } from './services/weather/weather.service';
 import { GeoLocationService } from './services/geo-location/geo-location.service';
 import { WeatherWeekDayComponent } from './components/weather-week-day/weather-week-day.component';
+import { WeatherForecastResolverService } from './resolvers/weather-forecast-resolver/weather-forecast-resolver.service';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { WeatherWeekDayComponent } from './components/weather-week-day/weather-w
   providers: [
     WeatherService,
     GeoLocationService,
+    WeatherForecastResolverService,
   ]
 })
 export class WeatherModule { }
