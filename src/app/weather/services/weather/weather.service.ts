@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, of, forkJoin } from 'rxjs';
-import { IWeatherForecast } from '../interfaces/weather-forecast.interface';
+import { IWeatherForecast } from 'app/weather/interfaces/weather-forecast.interface';
 import { environment } from 'environments/environment';
 import { map, catchError, flatMap, tap } from 'rxjs/operators';
-import { IForecast, IForecastCity } from '../interfaces/forecast.interface';
-import { IWeatherParams } from '../interfaces/weather-params.interface';
+import { IForecast, IForecastCity } from 'app/weather/interfaces/forecast.interface';
+import { IWeatherParams } from 'app/weather/interfaces/weather-params.interface';
 
 @Injectable()
 export class WeatherService {
@@ -68,12 +68,10 @@ export class WeatherService {
     if (error instanceof HttpErrorResponse) {
       if (!navigator.onLine) {
         return throwError("It seems like you're not connected to the internet");
-      } else {
-        return throwError(error);
       }
-    } else {
-      console.error('Oops:', error);
+      return throwError(error);
     }
+    console.error('Oops:', error);
     return throwError('An error occurred. Please try again.');
   }
 
