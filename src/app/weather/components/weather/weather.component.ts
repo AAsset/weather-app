@@ -1,8 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
+import { IGeolocationPosition } from 'app/weather/interfaces/geo-location-position.interface';
 import { GeoLocationService } from 'app/weather/services/geo-location/geo-location.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, throwError } from 'rxjs';
+import { catchError, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-weather',
@@ -20,7 +21,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
-  onSearch(value) {
+  onSearch(value: string) {
     this.onForecastNavigate({
       city: value
     });
@@ -29,15 +30,16 @@ export class WeatherComponent implements OnInit, OnDestroy {
   onCurrentPosition() {
     this.geoLocationService.getPosition()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(position => {
-        this.onForecastNavigate({
+      .subscribe(
+        (position: IGeolocationPosition) => this.onForecastNavigate({
           lat: position.coords.latitude,
           lon: position.coords.longitude,
-        });
-      });
+        }),
+        (error) => alert(error.message)
+      );
   }
 
-  onForecastNavigate(queryParams) {
+  onForecastNavigate(queryParams: Params) {
     this.router.navigate(['/forecast'], { queryParams });
   }
 

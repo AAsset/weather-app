@@ -9,7 +9,7 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class SearchComponent {
   @Input() placeholder: string = '';
-  @Output() searchCriteria = new EventEmitter();
+  @Output() searchCriteria: EventEmitter<string> = new EventEmitter<string>();
   searchword = new FormControl('', [Validators.required]);
 
   onSearch() {
