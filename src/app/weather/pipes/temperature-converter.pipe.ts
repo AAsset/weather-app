@@ -7,7 +7,7 @@ export class TemperatureConverterPipe implements PipeTransform {
 
   transform(value: number, unit: 'C' | 'F') {
     if (!Number(value) || isNaN(Number(value))) {
-      return;
+      return '';
     }
     if (unit === 'C') {
       return Math.round(value) + '°C';
@@ -16,6 +16,6 @@ export class TemperatureConverterPipe implements PipeTransform {
       const tempF = value * 1.8 + 32;
       return Math.round(tempF) + '°F';
     }
-    return;
+    return '';
   }
 }
