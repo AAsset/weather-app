@@ -2,8 +2,8 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/
 import { Params, Router } from '@angular/router';
 import { IGeolocationPosition } from 'app/weather/interfaces/geo-location-position.interface';
 import { GeoLocationService } from 'app/weather/services/geo-location/geo-location.service';
-import { Subject, throwError } from 'rxjs';
-import { catchError, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-weather',
