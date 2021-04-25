@@ -2,6 +2,7 @@
   <app-search
     class="weather__search"
     [placeholder]="'City'"
+    [requiredErrorMessage]="'Enter city name'"
     (searchCriteria)="onSearch($event)"
   ></app-search>
   <div class="weather__position">

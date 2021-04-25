@@ -9,14 +9,15 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class SearchComponent {
   @Input() placeholder: string = '';
+  @Input() requiredErrorMessage: string = '';
   @Output() searchCriteria: EventEmitter<string> = new EventEmitter<string>();
-  searchword = new FormControl('', [Validators.required]);
+  searchWord = new FormControl('', [Validators.required]);
 
   onSearch() {
-    if (this.searchword.invalid) {
-      this.searchword.markAsDirty();
+    if (this.searchWord.invalid) {
+      this.searchWord.markAsDirty();
       return;
     }
-    this.searchCriteria.emit(this.searchword.value.trim());
+    this.searchCriteria.emit(this.searchWord.value.trim());
   }
 }

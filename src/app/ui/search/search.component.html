@@ -1,10 +1,10 @@
 <div class="search__container">
-  <input class="search__input" type="text" [formControl]="searchword" placeholder="{{placeholder}}"
+  <input class="search__input" type="text" [formControl]="searchWord" placeholder="{{placeholder}}"
          (keydown.enter)="onSearch()">
   <span class="search__icon material-icons" (click)="onSearch()">search</span>
 </div>
-<ng-container *ngIf="(searchword?.invalid && searchword?.dirty) || searchword?.errors?.length">
+<ng-container *ngIf="(searchWord?.invalid && searchWord?.dirty) || searchWord?.errors?.length">
   <div class="search__errors">
-    <ng-container *ngIf="searchword?.errors?.required">Enter city name </ng-container>
+    <ng-container *ngIf="searchWord?.errors?.required">{{requiredErrorMessage}} </ng-container>
   </div>
 </ng-container>
