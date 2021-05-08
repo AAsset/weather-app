@@ -27,23 +27,6 @@ export class WeatherService {
     );
   }
 
-  public fetchForecastByCoords(lat: number, lon: number): Observable<IWeatherForecast> {
-    const queryParams = new HttpParams({
-      fromObject: {
-        lat: `${lat}`,
-        lon: `${lon}`,
-        units: 'metric',
-        appid: environment.openweather_api_key
-      }
-    });
-    return this.http.get<IWeatherForecast>(
-      `${environment.openweather_url}onecall?${queryParams}`
-    ).pipe(
-      map(w => this.mapToForecast(w)),
-      catchError(this.handleError),
-    );
-  }
-
   public fetchForecastByCity(params: IWeatherParams): Observable<IForecast> {
     const obj: any = {
       cnt: 7,
@@ -62,6 +45,23 @@ export class WeatherService {
       fromObject: obj
     });
     return this.http.get<IForecast>(`${environment.openweather_url}forecast?${queryParams}`);
+  }
+
+  public fetchForecastByCoords(lat: number, lon: number): Observable<IWeatherForecast> {
+    const queryParams = new HttpParams({
+      fromObject: {
+        lat: `${lat}`,
+        lon: `${lon}`,
+        units: 'metric',
+        appid: environment.openweather_api_key
+      }
+    });
+    return this.http.get<IWeatherForecast>(
+      `${environment.openweather_url}onecall?${queryParams}`
+    ).pipe(
+      map(w => this.mapToForecast(w)),
+      catchError(this.handleError),
+    );
   }
 
   private handleError(error: Error | HttpErrorResponse): Observable<never> {
